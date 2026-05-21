@@ -8,7 +8,7 @@ class Produk extends Model
 {
 protected $fillable = ['nama_produk','harga','gambar','style_id'];
 
-public function style()
+public function styles()
 {
     return $this->belongsTo(Style::class);
 }

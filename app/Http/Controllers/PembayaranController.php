@@ -8,12 +8,21 @@ use App\Models\Pembayaran;
 
 class PembayaranController extends Controller
 {
-    public function index()
-    {
-        $pembayaran = Pembayaran::all();
 
-        return view('admin.pages.pembayaran.index', compact('pembayaran'));
-    }
+    public function destroy($id)
+{
+    $pembayarans = Pembayaran::findOrFail($id);
+    $pembayarans->delete();
+
+    return redirect()->back()->with('success', 'Data pembayaran berhasil dihapus!');
+}
+
+  public function index()
+{
+    $pembayarans = Pembayaran::latest()->paginate(10);
+
+    return view('admin.pembayaran.index', compact('pembayarans'));
+}
 
     public function create($id)
     {
@@ -49,4 +58,5 @@ class PembayaranController extends Controller
         return redirect()->back()
             ->with('success', 'Pembayaran berhasil!');
     }
+
 }

@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('customer.layouts.app')
 
 @section('title', 'Pembayaran')
 
@@ -123,12 +123,9 @@
             Bayar Sekarang
 
         </button>
-        <a href="{{ route('produk.index') }}"
-       class="btn btn-light">
-
-        Kembali ke Produk
-
-    </a>
+        <a href="{{ route('produk') }}" class="btn btn-light">
+            Kembali ke Produk
+        </a>
 
 </div>
 

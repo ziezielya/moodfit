@@ -8,112 +8,119 @@ use App\Models\Style;
 
 class ProdukController extends Controller
 {
-    
-public function index(Request $request)
-{
-    $search = strtolower($request->search);
 
-    // CEK kalau database masih kosong
-    if (Produk::count() == 0) {
+    // =========================
+    // INDEX
+    // =========================
+    public function index(Request $request)
+    {
+        $search = strtolower($request->search);
 
-        Produk::create([
-            'nama_produk' => 'Warrior Elegance',
-            'harga' => 300000,
-            'gambar' => '20260425_194105.jpg',
-            'style_id' => 1
-        ]);
+        $produks = Produk::with('style')->latest()->get();
 
-        Produk::create([
-            'nama_produk' => 'Garuda Urban Layer',
-            'harga' => 700000,
-            'gambar' => '20260428_230059.jpg',
-            'style_id' => 1
-        ]);
+        // SEARCH
+        if ($search) {
 
-        Produk::create([
-            'nama_produk' => 'Azure Cloud Serenity',
-            'harga' => 500000,
-            'gambar' => '20260426_153617.jpg',
-            'style_id' => 1
-        ]);
+            $produks = $produks->filter(function ($item) use ($search) {
 
-        Produk::create([
-            'nama_produk' => 'Heritage Smart Layer',
-            'harga' => 800000,
-            'gambar' => '20260426_184240.jpg',
-            'style_id' => 1
-        ]);
+                return str_contains(strtolower($item->nama_produk), $search)
 
-        Produk::create([
-            'nama_produk' => 'Urban Street Cargo Outfit',
-            'harga' => 800000,
-            'gambar' => 'image_1a4bf4ea.png',
-            'style_id' => 2
-        ]);
+                    || str_contains(
+                        strtolower($item->style->nama_style ?? ''),
+                        $search
+                    );
+            });
+        }
 
-        Produk::create([
-            'nama_produk' => 'Olive Casual Chic',
-            'harga' => 370000,
-            'gambar' => 'image_26a0b39d.png',
-            'style_id' => 2
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Chic Preppy',
-            'harga' => 450000,
-            'gambar' => 'p7.png',
-            'style_id' => 2
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Quiet Luxury',
-            'harga' => 700000,
-            'gambar' => 'p8.png',
-            'style_id' => 2
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Commuter Look',
-            'harga' => 1700000,
-            'gambar' => 'f9.jpg',
-            'style_id' => 3
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Modern Tailoring',
-            'harga' => 900000,
-            'gambar' => 'f10.jpg',
-            'style_id' => 3
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Modern Tailoring',
-            'harga' => 1300000,
-            'gambar' => 'f11.jpg',
-            'style_id' => 3
-        ]);
-
-        Produk::create([
-            'nama_produk' => 'Modern Tailoring',
-            'harga' => 1700000,
-            'gambar' => 'f12.jpg',
-            'style_id' => 3
-        ]);
-
-
+        return view('admin.produk.index', compact('produks'));
     }
 
-    $produks = Produk::with('style')->get();
+    // =========================
+    // CREATE
+    // =========================
+    public function create()
+    {
+        $styles = Style::all();
 
-    // FILTER SEARCH
-    if ($search) {
-        $produks = $produks->filter(function ($item) use ($search) {
-            return str_contains(strtolower($item->nama_produk), $search) ||
-                str_contains(strtolower($item->style->nama_style), $search);
-        });
+        return view('admin.pages.produk.create', compact('styles'));
     }
 
-    return view('admin.pages.produk.index', compact('produks'));
-}
+    // =========================
+    // STORE
+    // =========================
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_produk' => 'required',
+            'harga' => 'required',
+            'style_id' => 'required',
+            'gambar' => 'required|image'
+        ]);
 
+        $gambar = time() . '.' . $request->gambar->extension();
+
+        $request->gambar->move(public_path('produk'), $gambar);
+
+        Produk::create([
+            'nama_produk' => $request->nama_produk,
+            'harga' => $request->harga,
+            'style_id' => $request->style_id,
+            'gambar' => $gambar,
+        ]);
+
+        return redirect('/admin/produk')
+            ->with('success', 'Produk berhasil ditambahkan');
+    }
+
+    // =========================
+    // EDIT
+    // =========================
+    public function edit($id)
+    {
+        $produk = Produk::findOrFail($id);
+
+        $styles = Style::all();
+
+        return view('admin.pages.produk.edit', compact('produk', 'styles'));
+    }
+
+    // =========================
+    // UPDATE
+    // =========================
+    public function update(Request $request, $id)
+    {
+        $produk = Produk::findOrFail($id);
+
+        $data = [
+            'nama_produk' => $request->nama_produk,
+            'harga' => $request->harga,
+            'style_id' => $request->style_id,
+        ];
+
+        // CEK JIKA UPLOAD GAMBAR BARU
+        if ($request->hasFile('gambar')) {
+
+            $gambar = time() . '.' . $request->gambar->extension();
+
+            $request->gambar->move(public_path('produk'), $gambar);
+
+            $data['gambar'] = $gambar;
+        }
+
+        $produk->update($data);
+
+        return redirect('/admin/produk')
+            ->with('success', 'Produk berhasil diupdate');
+    }
+
+    // =========================
+    // DELETE
+    // =========================
+    public function destroy($id)
+    {
+        Produk::destroy($id);
+
+        return back()
+            ->with('success', 'Produk berhasil dihapus');
+    }
 }
