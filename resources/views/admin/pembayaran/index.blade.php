@@ -21,15 +21,6 @@
             </p>
         </div>
 
-        {{-- SEARCH --}}
-        <form method="GET">
-
-            <input type="text"
-                   name="search"
-                   placeholder="Cari customer..."
-                   class="w-72 px-5 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-
-        </form>
 
     </div>
 
@@ -70,230 +61,94 @@
                         Tanggal
                     </th>
 
+                    <th class="px-6 py-5 text-center text-sm font-semibold text-gray-600">
+                        Aksi
+                    </th>
+
                 </tr>
 
             </thead>
 
             <tbody class="divide-y divide-gray-100">
 
-                {{-- DATA 1 --}}
-                <tr class="hover:bg-gray-50 transition">
+                @forelse ($pembayarans as $item)
+
+                <tr class="hover:bg-gray-50 transition duration-200">
 
                     <td class="px-6 py-5 text-gray-700">
-                        1
+                        {{ $loop->iteration }}
                     </td>
 
-                    <td class="px-6 py-5">
-
-                        <div>
-                            <h3 class="font-semibold text-gray-800">
-                                Andi Pratama
-                            </h3>
-
-                            <p class="text-sm text-gray-400">
-                                andi@gmail.com
-                            </p>
-                        </div>
-
+                    <td class="px-6 py-5 font-medium text-gray-800">
+                        {{ $item->nama_customer }}
                     </td>
 
                     <td class="px-6 py-5 text-gray-700">
-                        Oversize Hoodie
+                        {{ $item->produk }}
                     </td>
 
-                    <td class="px-6 py-5 font-semibold text-gray-800">
-                        Rp 350.000
-                    </td>
-
-                    <td class="px-6 py-5">
-                        QRIS
+                    <td class="px-6 py-5 font-bold text-gray-800">
+                        Rp {{ number_format($item->total, 0, ',', '.') }}
                     </td>
 
                     <td class="px-6 py-5">
+                        {{ $item->metode_pembayarans }}
+                    </td>
 
-                        <span class="bg-green-100 text-green-600 px-4 py-2 rounded-xl text-sm font-semibold">
-                            Success
+                    <td class="px-6 py-5">
+
+                        <span class="px-3 py-1 rounded-full text-xs font-bold
+                            @if($item->status == 'Lunas')
+                                bg-green-100 text-green-700
+                            @else
+                                bg-yellow-100 text-yellow-700
+                            @endif
+                        ">
+                            {{ $item->status }}
                         </span>
 
                     </td>
 
                     <td class="px-6 py-5 text-gray-500">
-                        20 Mei 2026
+                        {{ $item->created_at->format('d M Y') }}
+                    </td>
+
+                    {{-- ACTION --}}
+                    <td class="px-6 py-5 text-center">
+
+                        <form action="{{ route('pembayaran.destroy', $item->id) }}"
+                              method="POST"
+                              onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit"
+                                class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-semibold transition">
+                                Hapus
+                            </button>
+
+                        </form>
+
                     </td>
 
                 </tr>
 
-                {{-- DATA 2 --}}
-                <tr class="hover:bg-gray-50 transition">
+                @empty
 
-                    <td class="px-6 py-5 text-gray-700">
-                        2
-                    </td>
+                <tr>
 
-                    <td class="px-6 py-5">
-
-                        <div>
-                            <h3 class="font-semibold text-gray-800">
-                                Sinta Amelia
-                            </h3>
-
-                            <p class="text-sm text-gray-400">
-                                sinta@gmail.com
-                            </p>
-                        </div>
-
-                    </td>
-
-                    <td class="px-6 py-5 text-gray-700">
-                        Cargo Pants
-                    </td>
-
-                    <td class="px-6 py-5 font-semibold text-gray-800">
-                        Rp 420.000
-                    </td>
-
-                    <td class="px-6 py-5">
-                        Bank Transfer
-                    </td>
-
-                    <td class="px-6 py-5">
-
-                        <span class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-xl text-sm font-semibold">
-                            Pending
-                        </span>
-
-                    </td>
-
-                    <td class="px-6 py-5 text-gray-500">
-                        19 Mei 2026
+                    <td colspan="8" class="text-center py-10 text-gray-400">
+                        Belum ada data pembayaran.
                     </td>
 
                 </tr>
 
-                {{-- DATA 3 --}}
-                <tr class="hover:bg-gray-50 transition">
+                @endforelse
 
-                    <td class="px-6 py-5 text-gray-700">
-                        3
-                    </td>
-
-                    <td class="px-6 py-5">
-
-                        <div>
-                            <h3 class="font-semibold text-gray-800">
-                                Rizky Maulana
-                            </h3>
-
-                            <p class="text-sm text-gray-400">
-                                rizky@gmail.com
-                            </p>
-                        </div>
-
-                    </td>
-
-                    <td class="px-6 py-5 text-gray-700">
-                        Denim Jacket
-                    </td>
-
-                    <td class="px-6 py-5 font-semibold text-gray-800">
-                        Rp 550.000
-                    </td>
-
-                    <td class="px-6 py-5">
-                        E-Wallet
-                    </td>
-
-                    <td class="px-6 py-5">
-
-                        <span class="bg-red-100 text-red-600 px-4 py-2 rounded-xl text-sm font-semibold">
-                            Failed
-                        </span>
-
-                    </td>
-
-                    <td class="px-6 py-5 text-gray-500">
-                        18 Mei 2026
-                    </td>
-
-                </tr>
-
-<tbody class="divide-y divide-gray-100">
-
-@foreach ($pembayarans as $item)
-<tr class="hover:bg-gray-50 transition">
-
-    <td class="px-6 py-5 text-gray-700">
-        {{ $loop->iteration }}
-    </td>
-
-    <td class="px-6 py-5">
-        {{ $item->nama_customer }}
-    </td>
-
-    <td class="px-6 py-5">
-        {{ $item->produk }}
-    </td>
-
-    <td class="px-6 py-5 font-semibold">
-        Rp {{ number_format($item->total, 0, ',', '.') }}
-    </td>
-
-    <td class="px-6 py-5">
-        {{ $item->metode_pembayaran }}
-    </td>
-
-    <td class="px-6 py-5">
-        {{ $item->status }}
-    </td>
-
-    <td class="px-6 py-5 text-gray-500">
-        {{ $item->created_at->format('d M Y') }}
-    </td>
-
-    {{-- ACTION --}}
-    <td class="px-6 py-5">
-
-        <form action="{{ route('pembayaran.destroy', $item->id) }}"
-              method="POST"
-              onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-
-            @csrf
-            @method('DELETE')
-
-            <button type="submit"
-                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
-                Hapus
-            </button>
-
-        </form>
-
-    </td>
-
-</tr>
-@endforeach
-
-</tbody>
-            
             </tbody>
 
         </table>
-        <tbody>
-@foreach ($pembayarans as $item)
-<tr>
-    <td>{{ $item->id }}</td>
-    <td>{{ $item->nama_customer }}</td>
-    <td>{{ $item->jumlah }}</td>
-
-    <td class="flex gap-2">
-
-
-        </form>
-
-    </td>
-</tr>
-@endforeach
-</tbody>
-</form>
 
     </div>
 

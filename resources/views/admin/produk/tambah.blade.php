@@ -1,4 +1,4 @@
-@extends('admin.sidebar')
+@extends('admin.layouts.app')
 
 @section('title', 'Tambah Produk Baru - MoodFit')
 @section('page-title', 'Tambah Produk')

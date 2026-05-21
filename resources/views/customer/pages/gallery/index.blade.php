@@ -1,123 +1,243 @@
 @extends('customer.layouts.app')
 
-@section('title', 'gallery')
+@section('title', 'Fashion Gallery')
 
 @section('content')
 
-<title>Fashion Week Gallery</title>
-
 <style>
-body {
-    margin: 0;
+
+body{
+    background: linear-gradient(to bottom, #dccfa7, #362b12);
     font-family: 'Poppins', sans-serif;
-    background-color: #ffffff;
 }
 
 /* SECTION */
-.gallery {
-    padding: 40px 60px;
+.gallery-section{
+    padding: 110px 40px 70px;
+    min-height: 100vh;
+}
+
+/* HEADER */
+.gallery-header{
     text-align: center;
+    margin-bottom: 50px;
 }
 
-.gallery h2 {
-    font-size: 26px;
-    margin-bottom: 5px;
+.gallery-header h2{
+    font-size: 42px;
+    font-weight: 800;
+    color: #7a5c00;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
 }
 
-.gallery p {
-    color: #777;
-    margin-bottom: 30px;
-    font-size: 14px;
+.gallery-header p{
+    max-width: 700px;
+    margin: auto;
+    color: #8d7b52;
+    font-size: 15px;
+    line-height: 1.8;
 }
 
 /* GRID */
-.gallery-container {
+.gallery-container{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    max-width: 1300px;
+    margin: auto;
 }
 
 /* CARD */
-.card {
-    background: #fff;
-    border-radius: 10px;
+.gallery-card{
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
     overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-    transition: 0.3s;
+    border: 1px solid #f5e2ad;
+    box-shadow: 0 10px 30px rgba(214, 180, 78, 0.12);
+    transition: all 0.35s ease;
+    position: relative;
 }
 
-.card:hover {
-    transform: translateY(-4px);
+.gallery-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(214, 180, 78, 0.18);
 }
 
 /* IMAGE */
-.card img {
+.gallery-card img{
     width: 100%;
-    height: 250px; /* kecil & rapi */
+    height: 340px;
     object-fit: cover;
+    transition: 0.4s;
 }
 
-/* TEXT */
-.card-content {
-    padding: 12px;
+.gallery-card:hover img{
+    transform: scale(1.05);
 }
 
-.card-content h3 {
-    font-size: 15px;
-    margin: 0;
+/* CONTENT */
+.gallery-content{
+    padding: 24px;
+    text-align: left;
 }
 
-.card-content p {
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
+.gallery-content h3{
+    font-size: 18px;
+    font-weight: 700;
+    color: #7a5c00;
+    margin-bottom: 10px;
+    line-height: 1.4;
 }
+
+.gallery-content p{
+    color: #7b7b7b;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* TAG */
+.gallery-tag{
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: rgba(255, 244, 204, 0.95);
+    color: #8a6700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    backdrop-filter: blur(5px);
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+    .gallery-section{
+        padding: 100px 20px 50px;
+    }
+
+    .gallery-header h2{
+        font-size: 32px;
+    }
+
+    .gallery-card img{
+        height: 280px;
+    }
+
+}
+
 </style>
 
-</head>
-<body>
+<section class="gallery-section">
 
-<section class="gallery">
-    <h2>Fashion Week Gallery</h2>
-    <p>Koleksi momen terbaik dari berbagai fashion week </p>
+    <!-- HEADER -->
+    <div class="gallery-header">
 
+        <h2>Fashion Week Gallery</h2>
+
+        <p>
+            Koleksi eksklusif dari berbagai fashion week yang menampilkan 
+            perpaduan kemewahan modern, budaya, dan estetika premium khas MoodFit.
+        </p>
+
+    </div>
+
+    <!-- GRID -->
     <div class="gallery-container">
 
-        <div class="card">
-            <img src="img/1.jpg">
-            <div class="card-content">
+        <!-- CARD 1 -->
+        <div class="gallery-card">
+
+            <div class="gallery-tag">
+                Fashion Week
+            </div>
+
+            <img src="{{ asset('img/1.jpg') }}" alt="Fashion">
+
+            <div class="gallery-content">
+
                 <h3>Nusantara Fashion Week</h3>
-                <p>yang menampilkan koleksi kontemporer berbasis kekayaan alam dan kain etnik Indonesia.</p>
+
+                <p>
+                    Koleksi kontemporer yang memadukan kekayaan kain etnik 
+                    Indonesia dengan sentuhan desain modern yang elegan.
+                </p>
+
             </div>
+
         </div>
 
-        <div class="card">
-            <img src="img/2.jpg">
-            <div class="card-content">
-                <h3>Sophisticated</h3>
-                <p>yang menonjolkan keanggunan, kemewahan yang elegan, namun tetap sederhana.</p>
+        <!-- CARD 2 -->
+        <div class="gallery-card">
+
+            <div class="gallery-tag">
+                Elegant Style
             </div>
+
+            <img src="{{ asset('img/2.jpg') }}" alt="Fashion">
+
+            <div class="gallery-content">
+
+                <h3>Sophisticated Elegance</h3>
+
+                <p>
+                    Menampilkan kemewahan minimalis dengan siluet modern 
+                    yang memberikan kesan classy dan timeless.
+                </p>
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <img src="img/3.jpg">
-            <div class="card-content">
+        <!-- CARD 3 -->
+        <div class="gallery-card">
+
+            <div class="gallery-tag">
+                Cultural Runway
+            </div>
+
+            <img src="{{ asset('img/3.jpg') }}" alt="Fashion">
+
+            <div class="gallery-content">
+
                 <h3>Ronakultura Jakarta</h3>
-                <p>Tema ini menggambarkan semarak budaya Jakarta yang dinamis, penuh warna, dan menjadi titik temu antara tradisi dengan gaya hidup kontemporer.</p>
+
+                <p>
+                    Semarak budaya Jakarta yang dinamis dipadukan 
+                    dengan gaya urban kontemporer yang fashionable.
+                </p>
+
             </div>
+
         </div>
 
-        <div class="card">
-            <img src="img/4.jpg">
-            <div class="card-content">
-                <h3>Future Fusion: Tradition Meets Innovation</h3>
-                <p>Fokusnya adalah memadukan wastra (kain tradisional) Nusantara dengan teknologi dan inovasi desain modern.</p>
+        <!-- CARD 4 -->
+        <div class="gallery-card">
+
+            <div class="gallery-tag">
+                Future Concept
             </div>
+
+            <img src="{{ asset('img/4.jpg') }}" alt="Fashion">
+
+            <div class="gallery-content">
+
+                <h3>Future Fusion</h3>
+
+                <p>
+                    Perpaduan wastra Nusantara dengan inovasi desain modern 
+                    untuk menghadirkan fashion masa depan yang artistik.
+                </p>
+
+            </div>
+
         </div>
 
     </div>
-</section>
 
-</body>
+</section>
 
 @endsection

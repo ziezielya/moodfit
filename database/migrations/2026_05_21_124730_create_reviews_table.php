@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('styles', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_style');
+
+            $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade');
+            $table->integer('rating');
+            $table->text('comment');
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('styles');
+        Schema::dropIfExists('reviews');
     }
 };

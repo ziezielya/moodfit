@@ -22,7 +22,7 @@ class HomeController extends Controller
     // PRODUK
     public function produk()
     {
-        $produks = Produk::all();
+        $produks = Produk::with('reviews')->get();
 
         return view('customer.pages.produk.index', compact('produks'));
     }

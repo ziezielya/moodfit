@@ -13,28 +13,24 @@ class ProdukController extends Controller
     // INDEX
     // =========================
     public function index(Request $request)
-    {
-        $search = strtolower($request->search);
+{
+    $search = strtolower($request->search);
 
-        $produks = Produk::with('style')->latest()->get();
+    $produks = Produk::with(['reviews', 'style'])
+        ->latest()
+        ->get();
 
-        // SEARCH
-        if ($search) {
+    // SEARCH
+    if ($search) {
+        $produks = $produks->filter(function ($item) use ($search) {
 
-            $produks = $produks->filter(function ($item) use ($search) {
-
-                return str_contains(strtolower($item->nama_produk), $search)
-
-                    || str_contains(
-                        strtolower($item->style->nama_style ?? ''),
-                        $search
-                    );
-            });
-        }
-
-        return view('admin.produk.index', compact('produks'));
+            return str_contains(strtolower($item->nama_produk), $search)
+                || str_contains(strtolower($item->style->nama_style ?? ''), $search);
+        });
     }
 
+    return view('admin.produk.index', compact('produks'));
+}
     // =========================
     // CREATE
     // =========================
@@ -42,7 +38,7 @@ class ProdukController extends Controller
     {
         $styles = Style::all();
 
-        return view('admin.pages.produk.create', compact('styles'));
+        return view('admin.produk.tambah', compact('styles'));
     }
 
     // =========================

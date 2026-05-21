@@ -28,7 +28,7 @@ class PembayaranController extends Controller
     {
         $produk = Produk::findOrFail($id);
 
-        return view('admin.pages.pembayaran.create', compact('produk'));
+        return view('customer.pages.pembayaran.create', compact('produk'));
     }
 
     public function store(Request $request)
