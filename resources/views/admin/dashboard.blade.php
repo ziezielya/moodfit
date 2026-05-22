@@ -59,7 +59,7 @@
                         Main Menu
                     </p>
 
-                    <a href="/admin/dashboard"
+                    <a href="{{ url('/admin/dashboard') }}"
                        class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-100 text-amber-950 font-bold shadow-md shadow-amber-200/50">
                         <div class="w-10 h-10 rounded-xl bg-white text-amber-600 shadow-sm flex items-center justify-center">
                             <i class="fas fa-chart-pie text-sm"></i>
@@ -70,7 +70,7 @@
                         </div>
                     </a>
 
-                    <a href="/admin/produk"
+                    <a href="{{ url('/admin/produk') }}"
                        class="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-yellow-50/60 text-gray-600 hover:text-amber-950 font-medium transition-all duration-200 hover:translate-x-1">
                         <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
                             <i class="fas fa-tshirt text-sm"></i>
@@ -81,7 +81,7 @@
                         </div>
                     </a>
 
-                    <a href="/admin/pembayaran"
+                    <a href="{{ url('/admin/pembayaran') }}"
                        class="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-yellow-50/60 text-gray-600 hover:text-amber-950 font-medium transition-all duration-200 hover:translate-x-1">
                         <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
                             <i class="fas fa-credit-card text-sm"></i>
@@ -205,7 +205,7 @@
                             </p>
                         </div>
 
-                        <a href="/admin/produk/create" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-black px-6 py-3.5 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm text-center flex items-center justify-center gap-2">
+                        <a href="{{ url('/admin/produk/create') }}" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-black px-6 py-3.5 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm text-center flex items-center justify-center gap-2">
                             <i class="fas fa-plus-circle text-xs"></i>
                             <span>Tambah Produk</span>
                         </a>

@@ -152,7 +152,7 @@
 
                 @endif
 
-                <form action="{{ route('pembayaran.store') }}" method="POST">
+                <form action="{{ url('/pembayaran/store') }}" method="POST">
 
                     @csrf
 
@@ -309,7 +309,7 @@
 
                         </button>
 
-                        <a href="{{ route('produk') }}"
+                        <a href="{{ url('/produk') }}"
                            class="btn btn-back">
 
                             <i class="fas fa-arrow-left me-2"></i>

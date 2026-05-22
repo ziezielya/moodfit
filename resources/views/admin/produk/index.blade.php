@@ -22,7 +22,7 @@
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
 
             <!-- SEARCH FORM -->
-            <form action="/admin/produk" method="GET" class="flex-1 sm:flex-none">
+            <!-- <form action="/admin/produk" method="GET" class="flex-1 sm:flex-none">
                 <div class="relative">
                     <input
                         type="text"
@@ -38,10 +38,10 @@
                         <i class="fas fa-search text-sm"></i>
                     </button>
                 </div>
-            </form>
+            </form> -->
 
             <!-- ADD PRODUCT BUTTON -->
-            <a href="/admin/produk/create"
+            <a href="{{ url('/admin/produk/create') }}"
                class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-black px-6 py-3.5 rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 text-sm text-center flex items-center justify-center gap-2">
                 <i class="fas fa-plus-circle"></i>
                 <span>Tambah Produk</span>
@@ -82,12 +82,12 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-2xl overflow-hidden border border-yellow-100 bg-amber-50 shadow-sm shrink-0">
-                                <img
-                                    src="{{ asset('produk/' . $item->gambar) }}"
-                                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                                    alt="{{ $item->nama_produk }}"
-                                    onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=200&auto=format&fit=crop'"
-                                >
+                            
+                            <img
+                                src="{{ asset('produk/' . $item->gambar) }}"
+                                class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                                alt=""
+                            >
                             </div>
                             <div>
                                 <h3 class="font-bold text-amber-950 text-base leading-tight">
@@ -120,14 +120,14 @@
                         <div class="flex justify-center items-center gap-2">
                             
                             <!-- EDIT BUTTON -->
-                            <a href="/admin/produk/{{ $item->id }}/edit"
+                            <a href="{{ url('/admin/produk/' . $item->id . '/edit') }}"
                                class="w-10 h-10 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
                                title="Edit Produk">
                                 <i class="fas fa-pen text-xs"></i>
                             </a>
 
                             <!-- DELETE FORM -->
-                            <form action="/admin/produk/{{ $item->id }}" method="POST" class="inline">
+                            <form action="{{ url('/admin/produk/' . $item->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button

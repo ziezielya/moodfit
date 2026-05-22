@@ -24,21 +24,9 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // First try normal guard attempt (works with hashed passwords)
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/admin/dashboard');
-        }
-
-        // Fallback: if admin exists and password stored in plain text, hash it and login
-        $admin = Admin::where('email', $request->email)->first();
-        if ($admin) {
-            if ($admin->password === $request->password) {
-                $admin->password = Hash::make($request->password);
-                $admin->save();
-                Auth::guard('admin')->login($admin);
-                return redirect('/admin/dashboard');
-            }
         }
 
         return back()->withErrors([
@@ -50,29 +38,43 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::guard('admin')->logout();
-        return redirect('/admin/login')->with('success', 'Anda telah logout');
+        return redirect('/')->with('success', 'Anda telah logout');
     }
 
-    // CUSTOMER LOGIN / LOGOUT
+     // =========================
+    // USER LOGIN
+    // =========================
+
     public function showUserLogin()
     {
-        return view('auth.login');
+        return view('customer.auth.login');
     }
 
     public function userLogin(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->back()->with('success', 'Login berhasil');
+            return redirect()->intended(route('produk'))->with('success', 'Login berhasil');
         }
 
-        return back()->withErrors(['email' => 'Login gagal'])->withInput();
+        return back()->withErrors([
+            'email' => 'Login gagal: email atau password salah',
+        ])->withInput();
     }
 
-    public function userLogout()
-    {
-        Auth::logout();
-        return redirect('/')->with('success', 'Anda telah logout');
-    }
+   public function userLogout()
+{
+    Auth::logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/')->with('success', 'Anda telah logout');
+}
 }

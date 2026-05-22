@@ -9,7 +9,6 @@ class ReviewController extends Controller
 {
     public function store(Request $request)
     {
-        // Pastikan user sudah login
         if (!auth()->check()) {
             return back()->with('error', 'Silakan login terlebih dahulu untuk memberikan review');
         }
@@ -34,12 +33,25 @@ class ReviewController extends Controller
     {
         $review = Review::findOrFail($id);
 
-        // Hanya user yang membuat review atau admin bisa hapus
-        if (auth()->id() !== $review->user_id && auth()->user()->role !== 'admin') {
-            return back()->with('error', 'Anda tidak memiliki akses untuk menghapus review ini');
+        $user = auth()->user();
+        $admin = auth('admin')->user();
+
+        if (!$user && !$admin) {
+            return back()->with('error', 'Silakan login terlebih dahulu');
         }
 
-        $review->delete();
-        return back()->with('success', 'Review berhasil dihapus');
+        // admin bisa hapus semua
+        if ($admin) {
+            $review->delete();
+            return back()->with('success', 'Review dihapus oleh admin');
+        }
+
+        // user hanya milik sendiri
+        if ($user && $user->id == $review->user_id) {
+            $review->delete();
+            return back()->with('success', 'Review berhasil dihapus');
+        }
+
+        return back()->with('error', 'Tidak punya akses');
     }
 }

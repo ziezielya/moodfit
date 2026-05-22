@@ -21,7 +21,7 @@
 
         <!-- FORM -->
         <form
-            action="/admin/produk"
+            action="{{ url('/admin/produk') }}"
             method="POST"
             enctype="multipart/form-data"
             class="space-y-6"
@@ -130,7 +130,7 @@
                     <span>Simpan Koleksi Baru</span>
                 </button>
 
-                <a href="/admin/produk"
+                <a href="{{ url('/admin/produk') }}"
                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-8 rounded-2xl text-sm transition-all duration-300 hover:scale-[1.01] text-center flex items-center justify-center">
                     Batal
                 </a>

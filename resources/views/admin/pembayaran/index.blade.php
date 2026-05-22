@@ -21,7 +21,6 @@
             </p>
         </div>
 
-
     </div>
 
     {{-- TABLE --}}
@@ -75,40 +74,49 @@
 
                 <tr class="hover:bg-gray-50 transition duration-200">
 
+                    {{-- NO --}}
                     <td class="px-6 py-5 text-gray-700">
                         {{ $loop->iteration }}
                     </td>
 
+                    {{-- CUSTOMER --}}
                     <td class="px-6 py-5 font-medium text-gray-800">
-                        {{ $item->nama_customer }}
+                        {{ $item->nama_customer ?? '-' }}
                     </td>
 
+                    {{-- PRODUK --}}
                     <td class="px-6 py-5 text-gray-700">
-                        {{ $item->produk }}
+                        {{ $item->nama_produk ?? ($item->produk->nama_produk ?? '-') }}
                     </td>
 
+                    {{-- TOTAL --}}
                     <td class="px-6 py-5 font-bold text-gray-800">
                         Rp {{ number_format($item->total, 0, ',', '.') }}
                     </td>
 
-                    <td class="px-6 py-5">
-                        {{ $item->metode_pembayarans }}
+                    {{-- METODE --}}
+                    <td class="px-6 py-5 text-gray-700">
+                        {{ $item->metode_pembayaran ?? '-' }}
                     </td>
 
+                    {{-- STATUS --}}
                     <td class="px-6 py-5">
 
                         <span class="px-3 py-1 rounded-full text-xs font-bold
                             @if($item->status == 'Lunas')
-                                bg-green-100 text-green-700
+                                bg-green-200 text-green-800
+                            @elseif($item->status == 'Pending')
+                                bg-yellow-200 text-yellow-800
                             @else
-                                bg-yellow-100 text-yellow-700
+                                bg-red-200 text-red-800
                             @endif
                         ">
-                            {{ $item->status }}
+                            {{ $item->status ?? '-' }}
                         </span>
 
                     </td>
 
+                    {{-- TANGGAL --}}
                     <td class="px-6 py-5 text-gray-500">
                         {{ $item->created_at->format('d M Y') }}
                     </td>
@@ -116,7 +124,7 @@
                     {{-- ACTION --}}
                     <td class="px-6 py-5 text-center">
 
-                        <form action="{{ route('pembayaran.destroy', $item->id) }}"
+                        <form action="{{ route('admin.pembayaran.destroy', $item->id) }}"
                               method="POST"
                               onsubmit="return confirm('Yakin ingin menghapus data ini?')">
 

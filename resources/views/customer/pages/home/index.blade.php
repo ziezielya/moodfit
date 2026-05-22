@@ -8,7 +8,7 @@
         min-height: 100vh;
         background:
         linear-gradient(to right, rgba(5,10,30,0.92), rgba(0,0,0,0.55)),
-        url('https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1974&auto=format&fit=crop');
+        url('');
         background-size: cover;
         background-position: center;
         overflow: hidden;
@@ -168,7 +168,9 @@
             Koleksi fashion premium dengan desain berkelas dan kualitas terbaik.
         </p>
 
-        <a href="/produk" class="hero-btn">
+    
+
+        <a href="{{ url('/produk') }}" class="hero-btn">
             Explore Collection
         </a>
 

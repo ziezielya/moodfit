@@ -45,69 +45,62 @@ class ProdukController extends Controller
     // STORE
     // =========================
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_produk' => 'required',
-            'harga' => 'required',
-            'style_id' => 'required',
-            'gambar' => 'required|image'
-        ]);
+{
+    $produk = new Produk();
 
-        $gambar = time() . '.' . $request->gambar->extension();
+    $produk->nama_produk = $request->nama_produk;
+    $produk->harga = $request->harga;
+    $produk->style_id = $request->style_id;
 
-        $request->gambar->move(public_path('produk'), $gambar);
+    // UPLOAD GAMBAR
+    if ($request->hasFile('gambar')) {
 
-        Produk::create([
-            'nama_produk' => $request->nama_produk,
-            'harga' => $request->harga,
-            'style_id' => $request->style_id,
-            'gambar' => $gambar,
-        ]);
+    $file = $request->file('gambar');
 
-        return redirect('/admin/produk')
-            ->with('success', 'Produk berhasil ditambahkan');
-    }
+    $namaFile = time() . '.' . $file->getClientOriginalExtension();
+
+    $file->storeAs('produk', $namaFile, 'public');
+
+    $produk->gambar = 'produk/' . $namaFile;
+}
 
     // =========================
     // EDIT
     // =========================
     public function edit($id)
-    {
-        $produk = Produk::findOrFail($id);
+{
+    $produk = Produk::findOrFail($id);
+    $styles = Style::all();
 
-        $styles = Style::all();
-
-        return view('admin.pages.produk.edit', compact('produk', 'styles'));
-    }
+    return view('admin.produk.edit', compact('produk', 'styles'));
+}
 
     // =========================
     // UPDATE
     // =========================
     public function update(Request $request, $id)
-    {
-        $produk = Produk::findOrFail($id);
+{
+    $produk = Produk::findOrFail($id);
 
-        $data = [
-            'nama_produk' => $request->nama_produk,
-            'harga' => $request->harga,
-            'style_id' => $request->style_id,
-        ];
+    $produk->nama_produk = $request->nama_produk;
+    $produk->harga = $request->harga;
+    $produk->style_id = $request->style_id;
 
-        // CEK JIKA UPLOAD GAMBAR BARU
-        if ($request->hasFile('gambar')) {
+    // UPDATE GAMBAR
+    if ($request->hasFile('gambar')) {
 
-            $gambar = time() . '.' . $request->gambar->extension();
+        $gambar = $request->file('gambar')
+            ->store('produk', 'public');
 
-            $request->gambar->move(public_path('produk'), $gambar);
-
-            $data['gambar'] = $gambar;
-        }
-
-        $produk->update($data);
-
-        return redirect('/admin/produk')
-            ->with('success', 'Produk berhasil diupdate');
+        $produk->gambar = $gambar;
     }
+
+    $produk->save();
+
+    return redirect('/admin/produk/index')
+        ->with('success', 'Produk berhasil diperbarui   ');
+}
+
 
     // =========================
     // DELETE

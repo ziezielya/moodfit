@@ -94,6 +94,7 @@
         position: relative;
         max-width: 880px;
         margin: auto;
+        margin-bottom: 30px;
     }
 
     .product-card:hover{
@@ -325,7 +326,7 @@ select.form-control {
 
         <div class="col-lg-5">
 
-            <form action="{{ route('produk') }}" method="GET">
+            <form action="{{ url('/produk') }}" method="GET">
 
                 <div class="d-flex align-items-center search-wrapper">
 
@@ -371,7 +372,7 @@ select.form-control {
                     </div>
                 @endif
 
-                <form action="{{ route('review.store') }}" method="POST">
+                <form action="{{ url('/review/store') }}" method="POST">
                     @csrf
 
                     <div class="row g-3">
@@ -420,7 +421,7 @@ select.form-control {
         <div class="col-lg-8">
             <div style="background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border: 1px solid #f1e6c3; border-radius: 20px; padding: 28px; text-align: center;">
                 <p style="color: #7a5c00; margin: 0;">
-                    <i class="fas fa-lock me-2"></i> Silakan <a href="{{ route('admin.login') }}" style="color: #f4c84d; text-decoration: none; font-weight: 700;">login</a> untuk memberikan review
+                    <i class="fas fa-lock me-2"></i> Silakan <a href="{{ url('/login') }}" style="color: #f4c84d; text-decoration: none; font-weight: 700;">login</a> untuk memberikan review
                 </p>
             </div>
         </div>
@@ -428,7 +429,7 @@ select.form-control {
     @endauth
 
     {{-- PRODUCT --}}
-    <div class="row g-4">
+    <div class="row g-5">
 
         @forelse ($produks as $item)
 
@@ -439,9 +440,17 @@ select.form-control {
                 {{-- IMAGE --}}
                 <div class="product-image-wrapper col-lg-4">
 
-                    <img src="{{ asset('img/' . $item->gambar) }}"
-                         class="product-image"
-                         alt="{{ $item->nama_produk }}">
+                   <img src="{{ asset('storage/' . $item->gambar) }}"
+                    class="product-image"
+                    alt="{{ $item->nama_produk }}">
+
+<p>
+    {{ $item->gambar }}
+</p>
+
+<p>
+    {{ asset('storage/' . $item->gambar) }}
+</p>
 
                     <div class="premium-badge">
                         PREMIUM
@@ -473,47 +482,35 @@ select.form-control {
 
                             </div>
 
-                            <p class="product-desc">
-                                Fashion premium MoodFit dengan desain modern luxury, 
-                                soft elegance, dan aesthetic butter yellow yang memberikan 
-                                kesan classy, eksklusif, dan fashionable.
-                            </p>
+                        @php
+                            $avg = $item->reviews->avg('rating') ?? 0;
+                            $count = $item->reviews->count();
+                        @endphp
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            @for($i=1;$i<=5;$i++)
+                                <i class="fas fa-star"
+                                   style="color: {{ $i <= round($avg) ? '#f4c84d' : '#b8bd6c' }}"></i>
+                            @endfor
+
+                            <small class="text-muted">
+                                {{ number_format($avg,1) }} ({{ $count }})
+                            </small>
 
                         </div>
-
-@php
-    $avg = $item->reviews->avg('rating') ?? 0;
-    $count = $item->reviews->count();
-@endphp
-
-<div class="d-flex align-items-center gap-2 mb-3">
-
-    @for($i=1;$i<=5;$i++)
-        <i class="fas fa-star"
-           style="color: {{ $i <= round($avg) ? '#f4c84d' : '#b8bd6c' }}"></i>
-    @endfor
-
-    <small class="text-muted">
-        {{ number_format($avg,1) }} ({{ $count }})
-    </small>
-
-</div>
-
-              
 
                         {{-- BUTTON --}}
                         <div class="d-flex flex-wrap gap-3">
 
                             {{-- BELI --}}
-                            <a href="{{ route('pembayaran.create', $item->id) }}"
+                            <a href="{{ url('/pembayaran/create') }}/{{ $item->id }}"
                                class="btn btn-buy">
 
                                 <i class="fas fa-bag-shopping me-2"></i>
                                 Beli Sekarang
 
                             </a>
-
-                            
 
                             {{-- CUSTOM --}}
                             <a href="https://wa.me/6283195908268?text=Halo%20Admin%20MoodFit,%20saya%20ingin%20custom%20produk%20{{ urlencode($item->nama_produk) }}"

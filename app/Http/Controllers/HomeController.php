@@ -20,12 +20,12 @@ class HomeController extends Controller
     }
 
     // PRODUK
-    public function produk()
-    {
-        $produks = Produk::with('reviews')->get();
+    public function produk(Request $request)
+{
+    $produks = Produk::with(['style', 'reviews'])->get();
 
-        return view('customer.pages.produk.index', compact('produks'));
-    }
+    return view('customer.pages.produk.index', compact('produks'));
+}
 
     // GALLERY
     public function gallery()

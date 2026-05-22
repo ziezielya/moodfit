@@ -93,8 +93,8 @@
             @endif
 
             <!-- Form -->
-            <form action="/admin/login" method="POST" class="space-y-6">
-                @csrf
+                <form action="{{ url('/admin/login') }}" method="POST">               
+                     @csrf
 
                 <!-- Email Input -->
                 <div class="space-y-2">
